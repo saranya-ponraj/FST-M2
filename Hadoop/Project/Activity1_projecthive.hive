@@ -1,0 +1,19 @@
+-- Drop table Characters
+DROP TABLE Characters;
+
+-- Create table Characters
+CREATE TABLE Characters(name string, line string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+TBLPROPERTIES ("skip.header.line.count"="2");
+
+-- Load input file into table Characters
+LOAD DATA LOCAL INPATH '/episodeIV_dialogues.txt' INTO TABLE Characters; 
+LOAD DATA LOCAL INPATH '/episodeV_dialogues.txt' INTO TABLE Characters;
+LOAD DATA LOCAL INPATH '/episodeVI_dialogues.txt' INTO TABLE Characters;
+
+-- GET Data from table
+INSERT OVERWRITE DIRECTORY 'hdfs:///user/saranya/Characteroutput'
+SELECT name, count(line) as No_of_lines FROM Characters 
+GROUP BY name
+ORDER BY No_of_lines desc;
+

@@ -1,0 +1,17 @@
+-- DROP Table
+DROP TABLE Characters_1;
+
+-- Create table Characters_1
+CREATE TABLE Characters_1(name string, line string)
+ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' 
+TBLPROPERTIES ("skip.header.line.count"="2");
+
+-- Load input file into table Characters_1
+LOAD DATA LOCAL INPATH '/episodeIV_dialogues.txt' INTO TABLE Characters_1; 
+
+-- GET Data from table
+
+INSERT OVERWRITE DIRECTORY 'hdfs:///user/saranya/Lukeoutput'
+SELECT count(line) FROM Characters_1 
+where line like '%Luke%';
+
